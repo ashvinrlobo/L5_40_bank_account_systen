@@ -75,7 +75,8 @@ def compute_bonus(acc_id, expr):
 
 
 def get_hash(pin):
-    return hashlib.md5(pin.encode()).hexdigest()
+    """Generate SHA-256 hash digest of a PIN."""
+    return hashlib.sha256(pin.encode()).hexdigest()
 
 
 def generate_temp_pin():
