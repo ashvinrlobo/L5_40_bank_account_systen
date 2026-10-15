@@ -39,11 +39,16 @@ def _safe_eval(node, variables):
     raise ValueError(f"Unsupported expression node: {type(node).__name__}")
 
 
-def createAccount(acc_id, name, initial_deposit=0, transactions=[]):
+def createAccount(acc_id, name, initial_deposit=0, transactions=None):
+    """Create a new account with the specified initial deposit."""
+    if transactions is None:
+        transactions = []
     if acc_id in account_data:
         return False
     account_data[acc_id] = {"name": name, "balance": initial_deposit}
-    transactions.append("Created %s with initial balance %d" % (acc_id, initial_deposit))
+    transactions.append(
+        f"Created {acc_id} with initial balance {initial_deposit}"
+    )
     return True
 
 
