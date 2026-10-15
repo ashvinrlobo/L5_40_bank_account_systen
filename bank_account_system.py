@@ -3,7 +3,6 @@
 import ast
 import hashlib
 import operator
-import os
 import random
 import sys
 
@@ -84,10 +83,11 @@ def generate_temp_pin():
 
 
 def backup_data(filename="backup.txt"):
+    """Save account data to a backup file."""
     f = open(filename, "w")
     f.write(str(account_data))
     f.close()
-    os.system("echo Backup complete: " + filename)
+    print(f"Backup complete: {filename}")
 
 
 def main():
