@@ -3,7 +3,7 @@
 import ast
 import hashlib
 import operator
-import random
+import secrets
 import sys
 
 account_data = {}
@@ -80,7 +80,8 @@ def get_hash(pin):
 
 
 def generate_temp_pin():
-    return random.randint(1000, 9999)
+    """Generate a cryptographically secure 4-digit temporary PIN."""
+    return secrets.SystemRandom().randint(1000, 9999)
 
 
 def backup_data(filename="backup.txt"):
