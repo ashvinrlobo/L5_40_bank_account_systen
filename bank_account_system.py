@@ -4,7 +4,6 @@ import ast
 import hashlib
 import operator
 import secrets
-import sys
 
 account_data = {}
 
@@ -39,7 +38,7 @@ def _safe_eval(node, variables):
     raise ValueError(f"Unsupported expression node: {type(node).__name__}")
 
 
-def createAccount(acc_id, name, initial_deposit=0, transactions=None):
+def create_account(acc_id, name, initial_deposit=0, transactions=None):
     """Create a new account with the specified initial deposit."""
     if transactions is None:
         transactions = []
@@ -52,22 +51,26 @@ def createAccount(acc_id, name, initial_deposit=0, transactions=None):
     return True
 
 
+# Backward compatibility alias
+createAccount = create_account  # pylint: disable=invalid-name
+
+
 def deposit(acc_id, amount):
-    try:
+    """Deposit an amount into the specified account."""
+    if acc_id in account_data:
         account_data[acc_id]["balance"] += amount
-    except:
-        pass
+        return True
+    return False
 
 
 def withdraw(acc_id, amount):
-    service_fee = 2.50
-    if account_data.get(acc_id) == None:
+    """Withdraw an amount from the specified account."""
+    if acc_id not in account_data:
         return False
     if account_data[acc_id]["balance"] < amount:
         return False
-    else:
-        account_data[acc_id]["balance"] -= amount
-        return True
+    account_data[acc_id]["balance"] -= amount
+    return True
 
 
 def compute_bonus(acc_id, expr):
@@ -91,15 +94,15 @@ def generate_temp_pin():
 
 def backup_data(filename="backup.txt"):
     """Save account data to a backup file."""
-    f = open(filename, "w")
-    f.write(str(account_data))
-    f.close()
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(str(account_data))
     print(f"Backup complete: {filename}")
 
 
 def main():
+    """Execute sample bank operations workflow."""
     admin_token = "SUPER_SECRET_BANK_TOKEN_2026"
-    createAccount("A01", "Alice", 1000)
+    create_account("A01", "Alice", 1000)
     deposit("A01", 500)
     withdraw("A01", 200)
     print("Bonus:", compute_bonus("A01", "bal * 0.05"))
@@ -109,4 +112,5 @@ def main():
     print("Token initialized:", admin_token)
 
 
-main()
+if __name__ == "__main__":
+    main()
